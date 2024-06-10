@@ -1,0 +1,117 @@
+sync-trello-pre-feature-branch:
+  stage: .pre
+  image: python:3.8
+  before_script:
+    - pip3 install requests
+  script:
+    - python3 pipeline/pipeline.py --step pre_feature_branch
+  rules:
+    - when: never
+      if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - when: never
+      if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: always
+
+sync-trello-feature-branch:
+  stage: review
+  image: python:3.8
+  before_script:
+    - pip3 install requests
+  script:
+    - python3 pipeline/pipeline.py --step intra_feature_branch
+  needs:
+    - job: review
+    - job: unit_test
+    # - job: secret_detection
+    # - job: semgrep-sast
+    # - job: container_scanning
+    # - job: code_quality
+  rules:
+    - when: never
+      if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - when: never
+      if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: on_success
+
+sync-trello-post-feature-branch:success:
+  stage: .post
+  image: python:3.8
+  before_script:
+    - pip3 install requests
+  script:
+    - python3 pipeline/pipeline.py --step post_feature_branch
+  needs:
+    - job: stop_review
+      artifacts: true
+  variables:
+    PIPELINE_FAILED: 'false'
+  rules:
+    - when: never
+      if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - when: never
+      if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: on_success
+
+sync-trello-post-feature-branch:failure:
+  stage: .post
+  image: python:3.8
+  before_script:
+    - pip3 install requests
+  script:
+    - python3 pipeline/pipeline.py --step post_feature_branch
+  variables:
+    PIPELINE_FAILED: 'true'
+  rules:
+    - when: never
+      if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - when: never
+      if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: on_failure
+
+sync-trello-pre-production:
+  stage: .pre
+  image: python:3.8
+  before_script:
+    - pip3 install requests
+  script:
+    - python3 pipeline/pipeline.py --step pre_production
+  rules:
+    - when: never
+      if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - when: never
+      if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: always
+
+sync-trello-post-production:success:
+  stage: .post
+  image: python:3.8
+  before_script:
+    - pip3 install requests
+  script:
+    - python3 pipeline/pipeline.py --step post_production
+  needs:
+    - job: production
+  variables:
+    PIPELINE_FAILED: 'false'
+  rules:
+    - when: never
+      if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - when: never
+      if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: on_success
+
+sync-trello-post-production:failure:
+  stage: .post
+  image: python:3.8
+  before_script:
+    - pip3 install requests
+  script:
+    - python3 pipeline/pipeline.py --step post_production
+  variables:
+    PIPELINE_FAILED: 'true'
+  rules:
+    - when: never
+      if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - when: never
+      if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: on_failure

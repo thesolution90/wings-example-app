@@ -1,0 +1,43 @@
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
+  - local: 'pipeline/ci-gitlab.yaml'
+
+variables:
+  KUBE_CONTEXT: genesis-group/users/christopher-becker/wings-example-app:minikube
+  KUBE_INGRESS_BASE_DOMAIN: wings-example.app
+  KUBE_NAMESPACE: "wings-app"
+  TEST_DISABLED: "true"
+  LICENSE_MANAGEMENT_DISABLED: "true"
+  BROWSER_PERFORMANCE_DISABLED: "true"
+  LOAD_PERFORMANCE_DISABLED: "true"
+  DAST_DISABLED: "true"
+  CODE_INTELLIGENCE_DISABLED: "true"
+  CLUSTER_IMAGE_SCANNING_DISABLED: "true"
+  POSTGRES_ENABLED: "false"
+  # Can be removed
+  SAST_DISABLED: "true"
+  CONTAINER_SCANNING_DISABLED: "true"
+  CODE_QUALITY_DISABLED: "true"
+  SECRET_DETECTION_DISABLED: "true"
+
+unit_test:
+  stage: test
+  image: python:3.8
+  before_script:
+    - pip3 install pytest requests
+  script:
+    - pytest --junitxml=report.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event"
+
+stop_review:
+  stage: cleanup
+  after_script:
+    - echo "REVIEW_ACCEPTED=$ACCEPTED" >> build.env
+  artifacts:
+    reports:
+      dotenv: build.env

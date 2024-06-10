@@ -1,0 +1,4 @@
+src/__pycache__
+report.xml
+.pytest-cache
+pipeline/__pycache__

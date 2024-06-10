@@ -1,0 +1,9 @@
+gitops:
+  manifest_projects:
+  - id: "55107146"
+    paths:
+    - glob: '/manifests/*.{yaml,yml,json}'
+
+ci_access:
+  groups:
+  - id: genesis-group/users/christopher-becker
