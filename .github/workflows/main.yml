@@ -1,0 +1,14 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - 'github'
+jobs:
+  initial-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run script file
+      run: env
+      shell: bash
