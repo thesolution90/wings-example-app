@@ -10,5 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run script file
-      run: env
+      run: |
+        env
+        echo "${{toJSON(github.event)}}"
       shell: bash
