@@ -21,6 +21,10 @@ class TrelloBoard:
         self.api_token = api_token if api_token is not None else os.environ.get('TRELLO_API_TOKEN')
         self.board_lists = self.__query_lists_in_board()
 
+        print(os.environ.get('TRELLO_API_TOKEN'))
+        print(os.environ.get('TRELLO_API_KEY'))
+        print(os.environ.get('TRELLO_BOARD_ID'))
+
     def get_board_lists(self):
         '''
         Gibt alle Listen im Trello Board zurück.
