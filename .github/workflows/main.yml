@@ -55,7 +55,7 @@ jobs:
     #   with:
     #     name: docker-image-${{ github.event.head_commit.id }}
     #     path: docker-image-${{ github.event.head_commit.id }}.tar
-    needs: pre-feature-pipeline
+    needs: sync-trello-pre-feature-branch
     if: ${{ github.event_name }} == "push"
 
   unittest:
