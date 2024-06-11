@@ -14,8 +14,9 @@ class GitHubCommit(GitCommit):
     def __init__(self):
 
         github_commit_message = os.system('echo "${{ github.event.head_commit.message }}"')
+        print(github_commit_message)
         github_commit_hash = os.system('echo "${{ github.event.head_commit.id }}"')
-        github_commit_link_url = os.system(os.system('echo "${{ github.event.head_commit.url }}"'))
+        github_commit_link_url = os.system('echo "${{ github.event.head_commit.url }}"')
         github_branch_name = os.environ.get('GITHUB_REF_NAME')
         github_full_name = os.system('echo "${{ github.repository.full_name }}"')
         github_image_name = f'{github_full_name}/{github_commit_hash}'
