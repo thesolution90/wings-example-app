@@ -36,3 +36,6 @@ jobs:
         GH_COMMIT_LINK_URL: ${{ github.event.head_commit.url }}
         GH_FULL_NAME: ${{ github.repository.full_name }}
         GH_PROJECT_URL: ${{ github.repository.html_url }}
+        TRELLO_BOARD_ID: ${{ secrets.TRELLO_BOARD_ID }}
+        TRELLO_API_KEY: ${{ secrets.TRELLO_API_KEY }}
+        TRELLO_API_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
