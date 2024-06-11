@@ -5,14 +5,14 @@ import os
 import argparse
 from TrelloTask import TrelloTask
 from TrelloException import TrelloException
+from GitCommit import GitCommit
 from GitLabCommit import GitLabCommit
+from GitHubCommit import GitHubCommit
 
 parser = argparse.ArgumentParser(
     prog='pipeline',
     description='Dieses Programm führt die Trello Integrationen für GitLab CI/CD aus')
-
 parser.add_argument('--step', action='store', type=str, help='Name der auszuführenden Funktion')
-
 args = parser.parse_args()
 
 allowed_step_strings = [
@@ -26,9 +26,12 @@ if args.step not in allowed_step_strings:
     raise TrelloException('Nicht erlaubter Wert im Argument verwendet')
 
 # Hier werden Instanzen von GitLabCommit und TrelloTask gebildet
-git_commit = GitLabCommit()
+source_system = GitCommit.check_source_system()
+if source_system == 'github':
+    git_commit = GitHubCommit()
+if source_system == 'gitlab':
+    git_commit = GitLabCommit()
 trello = TrelloTask(git_commit)
-
 
 if args.step == allowed_step_strings[0]:
     # Vor der Ausführung der Production Pipeline
