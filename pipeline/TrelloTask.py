@@ -44,7 +44,6 @@ class TrelloTask(TrelloBoard):
         '''
         # Suchen der passenden Karte
         url = "https://api.trello.com/1/search"
-        print(self.git_commit.get_branch_name())
         query = {
             'query': self.git_commit.get_branch_name(),
             'partial': 'true',
@@ -52,7 +51,6 @@ class TrelloTask(TrelloBoard):
             'idBoards': self.board_id
         }
         api_response = self.query_trello_api(url, query)
-        print(api_response)
         # Prüfen der Karte auf Einmaligkeit
         if len(api_response['cards']) != 1:
             raise TrelloException('''Too many cards found. Need exactly one result.

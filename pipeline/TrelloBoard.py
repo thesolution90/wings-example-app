@@ -60,7 +60,6 @@ class TrelloBoard:
                 files=file_blob,
                 timeout=timeout
             )
-        print(response.text)
         return json.loads(response.text)
 
     def __query_lists_in_board(self):
