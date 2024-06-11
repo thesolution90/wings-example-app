@@ -30,7 +30,6 @@ class TrelloBoard:
         '''
         return self.board_lists
 
-
     def query_trello_api(self, url, params=None, method='GET', file_blob=None, timeout=10):
         '''
         Wrapper für die GET API Requests an die Trello REST API
