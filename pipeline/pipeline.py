@@ -27,8 +27,8 @@ if args.step not in allowed_step_strings:
 
 # Hier werden Instanzen von GitLabCommit und TrelloTask gebildet
 source_system = GitCommit.check_source_system()
-print(source_system)
-git_commit = GitHubCommit() if source_system == 'Github' else GitLabCommit()
+git_commit = GitHubCommit() if source_system == 'Github' else None
+git_commit = GitLabCommit() if source_system == 'Gitlab' else None
 trello = TrelloTask(git_commit)
 
 if args.step == allowed_step_strings[0]:
