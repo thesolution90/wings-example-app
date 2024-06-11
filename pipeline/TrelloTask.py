@@ -3,7 +3,7 @@ Diese Datei beinhaltet alle nötigen Funktionen für die Integration
 von Trello mit Gitlab CI/CD.
 '''
 from datetime import datetime
-from GitLabCommit import GitLabCommit
+from GitCommit import GitCommit
 from TrelloBoard import TrelloBoard
 from TrelloException import TrelloException
 
@@ -26,13 +26,14 @@ class TrelloTask(TrelloBoard):
                     gitlab_project_url (str): URL zum Projekt innerhalb von Gitlab
                     gitlab_image_name (str): Name des Docker Images in der Gitlab Registry
     '''
-    def __init__(self, git_commit: GitLabCommit):
+    def __init__(self, git_commit):
         super().__init__()
         self.git_commit = git_commit
         self.task = self.__get_task()
         # Andere
         now = datetime.now()
         self.now = now.strftime("%d/%m/%Y %H:%M:%S")
+        self.source_system = GitCommit.check_source_system()
 
     def __get_task(self):
         '''
@@ -59,10 +60,10 @@ class TrelloTask(TrelloBoard):
         task = api_response['cards'][0]
         # Prüfen auf das GitLab label
         for label in task['labels']:
-            if label['name'] == 'gitlab':
-                gitlab_label_existing = True
-        if not gitlab_label_existing:
-            raise TrelloException('The identified task has not the gitlab label. Aborting.')
+            if label['name'] == 'git':
+                git_label_existing = True
+        if not git_label_existing:
+            raise TrelloException('The identified task has not the git label. Aborting.')
         return {
             'task_id': task['id'],
             'list_id': task['idList']
@@ -79,7 +80,7 @@ class TrelloTask(TrelloBoard):
         self.__move_card_to('In Development')
 
         card_comment_text = f'''
-        Automatisiert generierte Nachricht von GitLab um {self.now}:
+        Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
         - Für diesen Task ist ein [Commit]({self.git_commit.get_commit_link_url()}) auf dem Entwicklungsbranch eingegangen: `{self.git_commit.get_commit_message()}`
         - Der Task wird auf den Status "In Development" verschoben.
         - Die Pipeline für den Commit kann [hier]({self.git_commit.get_pipeline_link_url()}) eingesehen werden.
@@ -100,7 +101,7 @@ class TrelloTask(TrelloBoard):
         with open('environment_url.txt', 'r', encoding='utf-8') as file:
             review_url = file.read()
         card_comment_text = f'''
-        Automatisiert generierte Nachricht von GitLab um {self.now}:
+        Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
         - Für den [Commit]({self.git_commit.get_commit_link_url()}) `{self.git_commit.get_commit_message()}` ist die Review gestartet worden.
         - Der Task wird auf den Status "In Review" verschoben.        
         - Die Review Instanz kann [hier]({review_url}) eingesehen werden.
@@ -133,7 +134,7 @@ class TrelloTask(TrelloBoard):
             self.__move_card_to('In Development')
 
             card_comment_text = f'''
-            Automatisiert generierte Nachricht von GitLab um {self.now}:
+            Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
             - Für den [Commit]({self.git_commit.get_commit_link_url()}) `{self.git_commit.get_commit_message()}` gab es Fehler in der Pipeline.
             - Der Task wird auf den Status "In Development" verschoben.
             - Die Pipeline für den Commit kann [hier]({self.git_commit.get_pipeline_link_url()}) eingesehen werden.
@@ -144,7 +145,7 @@ class TrelloTask(TrelloBoard):
             self.__move_card_to('Ready to Deploy')
 
             card_comment_text = f'''
-            Automatisiert generierte Nachricht von GitLab um {self.now}:
+            Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
             - Für den [Commit]({self.git_commit.get_commit_link_url()}) `{self.git_commit.get_commit_message()}` is der **Review akzeptiert** worden.
             - Der Task wird auf den Status "Ready to Deploy" verschoben.
             - Die Pipeline für den Commit kann [hier]({self.git_commit.get_pipeline_link_url()}) eingesehen werden.
@@ -156,7 +157,7 @@ class TrelloTask(TrelloBoard):
             self.__move_card_to('In Development')
 
             card_comment_text = f'''
-            Automatisiert generierte Nachricht von GitLab um {self.now}:
+            Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
             - Für den [Commit]({self.git_commit.get_commit_link_url()}) `{self.git_commit.get_commit_message()}` is der **Review nicht akzeptiert** worden.
             - Der Task wird auf den Status "In Development" verschoben.
             - Die Pipeline für den Commit kann [hier]({self.git_commit.get_pipeline_link_url()}) eingesehen werden.
@@ -173,7 +174,7 @@ class TrelloTask(TrelloBoard):
         self.__move_card_to('Ready to Deploy')
 
         card_comment_text = f'''
-        Automatisiert generierte Nachricht von GitLab um {self.now}:
+        Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
         - Für diesen Task ist ein [Commit]({self.git_commit.get_commit_link_url()}) auf dem Hauptbranch eingegangen: ```{self.git_commit.get_commit_message()}```
         - Der Task wird auf den Status "Ready to deploy" verschoben.
         - Die Pipeline für den Commit kann [hier]({self.git_commit.get_pipeline_link_url()}) eingesehen werden.
@@ -196,7 +197,7 @@ class TrelloTask(TrelloBoard):
             self.__move_card_to('Deployed')
 
             card_comment_text = f'''
-            Automatisiert generierte Nachricht von GitLab um {self.now}:
+            Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
             **Das Produktivsystem wurde erfolgreich aktualisiert.**
             - Die Pipeline für den Commit kann [hier]({self.git_commit.get_pipeline_link_url()}) eingesehen werden.
             - Das fertige Docker Image hat den folgenden Namen: `{self.git_commit.get_image_name()}`
@@ -206,7 +207,7 @@ class TrelloTask(TrelloBoard):
             self.__move_card_to('In Development')
 
             card_comment_text = f'''
-            Automatisiert generierte Nachricht von GitLab um {self.now}:
+            Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
             **Das Produktivsystem konnte nicht aktualisiert werden.**
             - Bei dem [Commit]({self.git_commit.get_commit_link_url()}) `{self.git_commit.get_commit_message()}` ist ein Fehler aufgetreten.
             - Der Task wird auf den Status "In Development" verschoben.

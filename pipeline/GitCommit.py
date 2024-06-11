@@ -6,6 +6,9 @@ import os
 from GitException import GitException
 
 class GitCommit:
+    '''
+    Hier muss noch eine Beschreibung rein.
+    '''
     def __init__(self, branch_name, commit_hash, commit_message,
         image_name, project_url, pipeline_id, pipeline_link_url,
         commit_link_url, test_report_link_url, codequality_report_link_url):
@@ -26,9 +29,9 @@ class GitCommit:
         Diese Funktion überprüft, ob es sich um GitLab oder GitHub handelt.
         '''
         if os.environ.get('GITHUB_ACTIONS') in ['true', True]:
-            return 'github'
+            return 'Github'
         elif os.environ.get('GITLAB_CI') in ['true', True]:
-            return 'gitlab'
+            return 'Gitlab'
         else:
             raise GitException('Source system not recognized.')
 
@@ -72,22 +75,22 @@ class GitCommit:
         '''
         Gibt den Link zur aktuellen Pipeline zurück.
         '''
-        return f'{self.gitlab_project_url}/-/pipelines/{self.get_pipeline_id}'
+        return self.pipeline_link_url
 
     def get_commit_link_url(self):
         '''
         Gibt den Link zum aktuellen Commit zurück.
         '''
-        return f'{self.gitlab_project_url}/-/commit/{self.gitlab_commit_hash}'
+        return self.commit_link_url
 
     def get_test_report_link_url(self):
         '''
         Gibt den Link zum Unit Test Report zurück.
         '''
-        return f'{self.get_pipeline_link_url()}/test_report'
+        return self.test_report_link_url
 
     def get_codequality_report_link_url(self):
         '''
         Gibt den Link zum Codequalitäts Report zurück.
         '''
-        return f'{self.get_pipeline_link_url()}/codequality_report'
+        return self.codequality_report_link_url
