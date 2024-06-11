@@ -16,9 +16,6 @@ class TrelloBoard:
         api_token (str): API Token zur Authentifzierung
     '''
     def __init__(self, board_id=None, api_key=None, api_token=None):
-        print(os.environ.get('TRELLO_API_TOKEN'))
-        print(os.environ.get('TRELLO_API_KEY'))
-        print(os.environ.get('TRELLO_BOARD_ID'))
         self.board_id = board_id if board_id is not None else os.environ.get('TRELLO_BOARD_ID')
         self.api_key = api_key if api_key is not None else os.environ.get('TRELLO_API_KEY')
         self.api_token = api_token if api_token is not None else os.environ.get('TRELLO_API_TOKEN')
@@ -64,6 +61,7 @@ class TrelloBoard:
                 files=file_blob,
                 timeout=timeout
             )
+        print(response.text)
         return json.loads(response.text)
 
     def __query_lists_in_board(self):
