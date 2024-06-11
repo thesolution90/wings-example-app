@@ -13,6 +13,7 @@ class GitCommit:
         image_name, project_url, pipeline_id, pipeline_link_url,
         commit_link_url, test_report_link_url, codequality_report_link_url):
         self.branch_name = branch_name
+        print(branch_name)
         self.commit_hash = commit_hash
         self.commit_message = commit_message
         self.image_name = image_name
