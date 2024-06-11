@@ -32,3 +32,9 @@ jobs:
       run: python3 pipeline/pipeline.py --step pre_feature_branch
       env:
         GH_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        GH_COMMIT_HASH: ${{ github.event.head_commit.id }}
+        GH_COMMIT_LINK_URL: ${{ github.event.head_commit.url }}
+        GH_FULL_NAME: ${{ github.repository.full_name }}
+        GH_PROJECT_URL: ${{ github.repository.html_url }}
+
+
