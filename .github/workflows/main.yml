@@ -36,5 +36,3 @@ jobs:
         GH_COMMIT_LINK_URL: ${{ github.event.head_commit.url }}
         GH_FULL_NAME: ${{ github.repository.full_name }}
         GH_PROJECT_URL: ${{ github.repository.html_url }}
-
-
