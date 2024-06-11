@@ -15,8 +15,9 @@ class GitLabCommit(GitCommit):
     '''
     def __init__(self):
         gitlab_commit_message = os.environ.get('CI_COMMIT_MESSAGE')
+        pipeline_source = os.environ.get('CI_PIPELINE_SOURCE')
         # Wenn Prod Pipeline
-        if gitlab_commit_message and "Merge branch '" in gitlab_commit_message:
+        if pipeline_source == 'merge_request_event' and "Merge branch '" in gitlab_commit_message:
             match = re.search(r"Merge branch '([^']*)'", gitlab_commit_message)
             if match:
                 gitlab_branch_name = match.group(1)
