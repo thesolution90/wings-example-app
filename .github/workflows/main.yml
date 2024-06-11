@@ -93,6 +93,7 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip3 install requests
+        echo "https://example.com" > environment.txt
     - name: Run Python script
       run: python3 pipeline/pipeline.py --step intra_feature_branch
       env:
