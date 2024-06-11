@@ -44,6 +44,7 @@ class TrelloTask(TrelloBoard):
         '''
         # Suchen der passenden Karte
         url = "https://api.trello.com/1/search"
+        print(self.git_commit.get_branch_name())
         query = {
             'query': self.git_commit.get_branch_name(),
             'partial': 'true',
