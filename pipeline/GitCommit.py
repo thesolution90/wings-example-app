@@ -7,7 +7,21 @@ from GitException import GitException
 
 class GitCommit:
     '''
-    Hier muss noch eine Beschreibung rein.
+    Diese Klasse beinhaltet die nötigen Informationen eines Git Commits,
+    der für Workflow-Systeme eingesetzt wird. Diese Klasse ist nicht
+    Quellsystem-spezifisch und wird als Elternklasse für die spezifischen
+    Klassen von Gitlab und Github eingesetzt.
+
+    Parameters:
+        branch_name (str): Name des Git Branches des Commits
+        commit_hash(str): Hashwert des Commits
+        commit_message(str): Nachricht des Commits
+        image_name(str): Name des Docker-Images, das aus dem Commit erzeugt wird
+        project_url(str): URL zu dem konkreten Projekt bei GitHub/Lab
+        pipeline_id(str): ID der aktuellen CI/CD Pipeline
+        pipeline_link_url(str): Link zur Pipeline bei GitHub/Lab
+        commit_link_url(str): Link zum Commit bei GitHub/Lab
+        test_report_link_url(str): Link zum Unittest Report bei GitHub/Lab
     '''
     def __init__(self, branch_name, commit_hash, commit_message,
         image_name, project_url, pipeline_id, pipeline_link_url,
@@ -29,10 +43,9 @@ class GitCommit:
         '''
         if os.environ.get('GITHUB_ACTIONS') in ['true', True]:
             return 'Github'
-        elif os.environ.get('GITLAB_CI') in ['true', True]:
+        if os.environ.get('GITLAB_CI') in ['true', True]:
             return 'Gitlab'
-        else:
-            raise GitException('Source system not recognized.')
+        raise GitException('Source system not recognized.')
 
     def get_branch_name(self):
         '''

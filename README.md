@@ -36,6 +36,3 @@ Unit Tests sind in der Datei `src/test_main.py` definiert. Zusätzlich sind für
 
 Für CI/CD wird hauptsächlich das Auto DevOps System von GitLab verwendet. Zusätzlich findet sich die gesamte Integration mit Trello im `pipeline/` Verzeichnis. Dazu existiert auch eine weitere [README](./pipeline/README.md).
 
-## Prozesses
-
-Diese finden sich im `bpmn/` Verzeichnis.

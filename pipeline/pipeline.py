@@ -3,6 +3,7 @@ Diese Datei beinhaltet die auszuführenden Schritte in der GitLab Pipeline
 '''
 import os
 import argparse
+from sys import exit
 from TrelloTask import TrelloTask
 from TrelloException import TrelloException
 from GitCommit import GitCommit
@@ -31,21 +32,29 @@ git_commit = GitHubCommit() if source_system == 'Github' else None
 git_commit = GitLabCommit() if source_system == 'Gitlab' else git_commit
 trello = TrelloTask(git_commit)
 
+# Vor der Ausführung der Production Pipeline
 if args.step == allowed_step_strings[0]:
-    # Vor der Ausführung der Production Pipeline
     trello.pre_production_pipeline()
-elif args.step == allowed_step_strings[1]:
-    # Nach der Ausführung der Production Pipeline
+    exit(0)
+
+# Nach der Ausführung der Production Pipeline
+if args.step == allowed_step_strings[1]:
     IS_PIPELINE_FAILED = os.environ.get('PIPELINE_FAILED') == 'true'
     trello.post_production_pipeline(IS_PIPELINE_FAILED)
-elif args.step == allowed_step_strings[2]:
-    # Vor der Ausführung der Feature Branch Pipeline
+    exit(0)
+
+# Vor der Ausführung der Feature Branch Pipeline
+if args.step == allowed_step_strings[2]:
     trello.pre_feature_branch_pipeline()
-elif args.step == allowed_step_strings[3]:
-    # Während der Ausführung der Feature Branch Pipeline
+    exit(0)
+
+# Während der Ausführung der Feature Branch Pipeline
+if args.step == allowed_step_strings[3]:
     trello.intra_feature_branch_pipeline()
-elif args.step == allowed_step_strings[4]:
-    # Nach der Ausführung der Feature Branch Pipeline
+    exit(0)
+
+# Nach der Ausführung der Feature Branch Pipeline
+if args.step == allowed_step_strings[4]:
     IS_PIPELINE_FAILED = os.environ.get('PIPELINE_FAILED') == 'true'
     if os.environ.get('REVIEW_ACCEPTED') is not None \
     and os.environ.get('REVIEW_ACCEPTED').lower() in ['yes', 'true']:
@@ -53,3 +62,4 @@ elif args.step == allowed_step_strings[4]:
     else:
         IS_REVIEW_FAILED = True
     trello.post_feature_branch_pipeline(IS_REVIEW_FAILED, IS_PIPELINE_FAILED)
+    exit(0)

@@ -5,7 +5,7 @@
 1. Ein Trello Board muss erstellt sein. Die ID davon muss bekannt sein. Diese wird in den GitLab CI/CD Variablen eingetragen (Name: `TRELLO_BOARD_ID`).
 2. Ein PowerUp muss in Trello erstellt werden und mit dem Board verbunden werden. Der angezeigt API Key wird in die CI/CD Variablen in GitLab eingetragen (Name: `TRELLO_API_KEY`).
 3. Der User muss einen API Token erstellen und in die CI/CD Variablen in GitLab eintragen (Name: `TRELLO_API_TOKEN`)
-4. Das Board muss mindestens die folgenden Spalten in der exakt gleichen Benamung haben: `In Development`, `In Review`, `Ready to Deploy`, `Deployed`. Es muss ein Label mit dem Namen `gitlab` existieren.
+4. Das Board muss mindestens die folgenden Spalten in der exakt gleichen Benamung haben: `In Development`, `In Review`, `Ready to Deploy`, `Deployed`. Es muss ein Label mit dem Namen `git` existieren.
 5. Es kann nun eine Karte erstellt werden. Der Titel muss den Namen den zukünftigen Feature Branches beinhalten. Die Karte muss mit den Label "gitlab" versehen werden. Der Name des Feature Branches darf nur einmalig in dem Board vorkommen. Bei Duplikaten bricht das Programm ab.
 
 ## Schritte innerhalb der Feature Branch Pipelines
@@ -74,12 +74,6 @@ Die Klasse benötigt die folgenden (Umgebungs-)Variablen zur Initialisierung:
 | board_id | ID des Trello Boards | `TRELLO_BOARD_ID` |
 | api_key | API Key des Trello PowerUps | `TRELLO_API_KEY` |
 | api_token | API Token des Trello Nutzers | `TRELLO_API_TOKEN` |
-| gitlab_branch_name | Aktueller Branch im Git Repository | `CI_COMMIT_REF_NAME` |
-| gitlab_commit_hash | (langer) Commit Hash im Git Repository | `CI_COMMIT_SHA` |
-| gitlab_commit_message | Nachricht innerhalb des Commits | `CI_COMMIT_MESSAGE` |
-| gitlab_pipeline_id | ID der Pipeline in GitLab | `CI_PIPELINE_ID` |
-| gitlab_project_url | URL zum Repository in GitLab | `CI_PROJECT_URL` |
-| gitlab_image_name | Name des Docker Images in der GitLab Registry | `CI_REGISTRY_IMAGE` |
 
 Die folgenden Befehle werden zur Ausführung verwendet:
 * Vor der Feature Branch Pipeline
@@ -112,7 +106,3 @@ python3 pipeline.py --step post_production
 
 Die eigentlichen Jobs in der Pipeline sind als Templates in der `trello-ci.yaml` Datei hinterlegt.
 
-## TODOs
-- Image Name implementieren
-- Prod Pipeline testen
-- Anhänge implementieren

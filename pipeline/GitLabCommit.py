@@ -9,6 +9,7 @@ from GitCommit import GitCommit
 class GitLabCommit(GitCommit):
     '''
     Die Klasse extrahiert alle Infomationen aus GitLab und erzeugt einen GitCommit.
+    Der Konstruktor bezieht alle Informationen dafür spezifisch von GitLab Runnern.
     Diese werden aus den Umgebungsvariablen extrahiert und dem Verwender zur
     Verfügung gestellt.
     '''

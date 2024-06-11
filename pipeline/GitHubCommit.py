@@ -8,8 +8,11 @@ from GitCommit import GitCommit
 class GitHubCommit(GitCommit):
     '''
     Die Klasse beinhaltet die relevanten Informationen eines jeden Git Commits.
+    Der Konstruktor bezieht alle Informationen dafür spezifisch von GitHub Actions.
     Diese werden aus den Umgebungsvariablen extrahiert und dem Verwender zur
     Verfügung gestellt.
+    Die Umgebungsvariablen werden entweder von GitHub an sich gestellt oder
+    werden in der CI-YAML Datei definiert.
     '''
     def __init__(self):
         github_commit_message = os.environ.get('GH_COMMIT_MESSAGE')
