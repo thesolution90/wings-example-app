@@ -13,7 +13,7 @@ class GitHubCommit(GitCommit):
     '''
     def __init__(self):
 
-        github_commit_message = os.system('echo "${{ github.event.head_commit.message }}"')
+        github_commit_message = os.environ.get('GH_COMMIT_MESSAGE')
         print(github_commit_message)
         github_commit_hash = os.system('echo "${{ github.event.head_commit.id }}"')
         github_commit_link_url = os.system('echo "${{ github.event.head_commit.url }}"')

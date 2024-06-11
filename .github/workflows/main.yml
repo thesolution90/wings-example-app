@@ -30,3 +30,5 @@ jobs:
         pip3 install requests
     - name: Run Python script
       run: python3 pipeline/pipeline.py --step pre_feature_branch
+      env:
+        GH_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
