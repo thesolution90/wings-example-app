@@ -28,8 +28,7 @@ class GitLabCommit(GitCommit):
         gitlab_pipeline_link_url = f'{gitlab_project_url}/-/pipelines/{gitlab_pipeline_id}'
         gitlab_commit_link_url = f'{gitlab_project_url}/-/commit/{gitlab_commit_hash}'
         gitlab_test_report_link_url = f'{gitlab_pipeline_link_url}/test_report'
-        gitlab_codequality_report_link_url = f'{gitlab_pipeline_link_url}/codequality_report'
 
         super().__init__(gitlab_branch_name, gitlab_commit_hash, gitlab_commit_message,
             gitlab_image_name, gitlab_project_url, gitlab_pipeline_id, gitlab_pipeline_link_url,
-            gitlab_commit_link_url, gitlab_test_report_link_url, gitlab_codequality_report_link_url)
+            gitlab_commit_link_url, gitlab_test_report_link_url)

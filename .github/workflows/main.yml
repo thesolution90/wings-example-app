@@ -8,10 +8,8 @@ jobs:
   pre-feature-pipeline:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
       with:
         python-version: '3.8'
     - name: Install dependencies
@@ -29,6 +27,30 @@ jobs:
         TRELLO_BOARD_ID: ${{ secrets.TRELLO_BOARD_ID }}
         TRELLO_API_KEY: ${{ secrets.TRELLO_API_KEY }}
         TRELLO_API_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/setup-buildx-action@v2
+    - uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ github.event.repository.full_name }}:${{ github.event.head_commit.id }} .
+    # - name: Save Docker image to file
+    #   run: |
+    #     docker save ${{ github.event.repository.full_name }}:${{ github.event.head_commit.id }} -o docker-image-${{ github.event.head_commit.id }}.tar
+    # - name: Upload Docker image artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: docker-image-${{ github.event.head_commit.id }}
+    #     path: docker-image-${{ github.event.head_commit.id }}.tar
+    needs: pre-feature-pipeline
 
   unittest:
     runs-on: ubuntu-latest
@@ -51,4 +73,4 @@ jobs:
       with:
         name: pytest-results
         path: results.xml
-    needs: pre-feature-pipeline
+    needs: build

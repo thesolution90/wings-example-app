@@ -107,7 +107,6 @@ class TrelloTask(TrelloBoard):
         - Die Review muss [hier]({self.git_commit.get_pipeline_link_url()}) akzeptiert oder abgelehnt werden.
         - Die Ergebnisse der CI Tests finden sich im Anhang dieses Tasks.
         - Die Ergebnisse des Unit Tests findet sich [hier]({self.git_commit.get_test_report_link_url()})
-        - Die Ergebnisse des Code Qualität findet sich [hier]({self.git_commit.get_codequality_report_link_url()})
         '''
         self.__add_new_comment(card_comment_text)
 

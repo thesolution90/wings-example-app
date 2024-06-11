@@ -21,9 +21,8 @@ class GitHubCommit(GitCommit):
         github_project_url = os.environ.get('GH_PROJECT_URL')
         github_pipeline_id = os.environ.get('GITHUB_RUN_ID')
         github_pipeline_link_url = f'{github_project_url}/actions/runs/{github_pipeline_id}'
-        github_test_report_link_url = 'placeholder_string'
-        github_codequality_report_link_url = 'placeholder_string'
+        github_test_report_link_url = github_pipeline_link_url
 
         super().__init__(github_branch_name, github_commit_hash, github_commit_message,
             github_image_name, github_project_url, github_pipeline_id, github_pipeline_link_url,
-            github_commit_link_url, github_test_report_link_url, github_codequality_report_link_url)
+            github_commit_link_url, github_test_report_link_url)

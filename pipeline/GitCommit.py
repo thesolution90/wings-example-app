@@ -11,9 +11,8 @@ class GitCommit:
     '''
     def __init__(self, branch_name, commit_hash, commit_message,
         image_name, project_url, pipeline_id, pipeline_link_url,
-        commit_link_url, test_report_link_url, codequality_report_link_url):
+        commit_link_url, test_report_link_url):
         self.branch_name = branch_name
-        print(branch_name)
         self.commit_hash = commit_hash
         self.commit_message = commit_message
         self.image_name = image_name
@@ -22,7 +21,6 @@ class GitCommit:
         self.pipeline_link_url = pipeline_link_url
         self.commit_link_url = commit_link_url
         self.test_report_link_url = test_report_link_url
-        self.codequality_report_link_url = codequality_report_link_url
 
     @staticmethod
     def check_source_system():
@@ -89,9 +87,3 @@ class GitCommit:
         Gibt den Link zum Unit Test Report zurück.
         '''
         return self.test_report_link_url
-
-    def get_codequality_report_link_url(self):
-        '''
-        Gibt den Link zum Codequalitäts Report zurück.
-        '''
-        return self.codequality_report_link_url
