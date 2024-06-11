@@ -1,15 +1,5 @@
 name: CI/CD Pipeline
 
-env: &env
-  GH_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-  GH_COMMIT_HASH: ${{ github.event.head_commit.id }}
-  GH_COMMIT_LINK_URL: ${{ github.event.head_commit.url }}
-  GH_FULL_NAME: ${{ github.event.repository.full_name }}
-  GH_PROJECT_URL: ${{ github.event.repository.html_url }}
-  TRELLO_BOARD_ID: ${{ secrets.TRELLO_BOARD_ID }}
-  TRELLO_API_KEY: ${{ secrets.TRELLO_API_KEY }}
-  TRELLO_API_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
-
 on:
   push:
     branches:
@@ -30,7 +20,15 @@ jobs:
         pip3 install requests
     - name: Run Python script
       run: python3 pipeline/pipeline.py --step pre_feature_branch
-      env: *env
+      env:
+        GH_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        GH_COMMIT_HASH: ${{ github.event.head_commit.id }}
+        GH_COMMIT_LINK_URL: ${{ github.event.head_commit.url }}
+        GH_FULL_NAME: ${{ github.event.repository.full_name }}
+        GH_PROJECT_URL: ${{ github.event.repository.html_url }}
+        TRELLO_BOARD_ID: ${{ secrets.TRELLO_BOARD_ID }}
+        TRELLO_API_KEY: ${{ secrets.TRELLO_API_KEY }}
+        TRELLO_API_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
 
   unittest:
     runs-on: ubuntu-latest
