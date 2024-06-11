@@ -14,7 +14,7 @@ class GitHubCommit:
     def __init__(self):
         commit_message = os.environ.get('GITHUB_REF_NAME')
         # Wenn Prod Pipeline
-        if commit_message and "Merge branch '" in commit_message:
+        if os.environ.get('GITHUB_REF_TYPE') == 'branch':
             match = re.search(r"Merge branch '([^']*)'", commit_message)
             if match:
                 branch_name = match.group(1)
@@ -25,6 +25,9 @@ class GitHubCommit:
         self.commit_message = os.environ.get('CI_COMMIT_MESSAGE')
         self.image_name = os.environ.get('CI_REGISTRY_IMAGE')
         self.project_url = os.environ.get('GITHUB_REPOSITORY') # + GITHUB_URL noch davor
-        self.pipeline_id = os.environ.get('CI_PIPELINE_ID')
+        self.pipeline_id = os.environ.get('GITHUB_RUN_ID')
         
+
+
+
         GITHUB_REPOSITORY
