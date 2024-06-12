@@ -28,7 +28,7 @@ class TrelloTask(TrelloBoard):
                     gitlab_project_url (str): URL zum Projekt in von Gitlab
                     gitlab_image_name (str): Name des Docker Images in Gitlab
     '''
-    def __init__(self, git_commit):
+    def __init__(self, git_commit: GitCommit):
         super().__init__()
         self.git_commit = git_commit
         self.task = self.__get_task()
@@ -120,8 +120,8 @@ class TrelloTask(TrelloBoard):
         # self.__upload_attachment('gl-container-scanning-report.json')
         # self.__upload_attachment('gl-sbom-report.cdx.json')
 
-    def post_feature_branch_pipeline(self, is_review_failed,
-                                     is_pipeline_failed):
+    def post_feature_branch_pipeline(self, is_review_failed: bool,
+                                     is_pipeline_failed: bool):
         '''
         Diese Funktion wird aufgerufen wenn die Review Pipelines enden.
         Folgende Dinge passieren hier:
@@ -186,7 +186,7 @@ class TrelloTask(TrelloBoard):
         '''
         self.__add_new_comment(card_comment_text)
 
-    def post_production_pipeline(self, is_failed):
+    def post_production_pipeline(self, is_failed: bool) -> None:
         '''
         Diese Funktion wird aufgerufen wenn die Review Pipelines starten.
         Folgende Dinge passieren hier:
@@ -219,7 +219,7 @@ class TrelloTask(TrelloBoard):
             '''
             self.__add_new_comment(card_comment_text)
 
-    def __add_new_comment(self, text):
+    def __add_new_comment(self, text: str):
         '''
         Mit dieser Funktion wird ein neuer Kommentar zu einer Card hinzugefügt.
         '''
@@ -229,7 +229,7 @@ class TrelloTask(TrelloBoard):
         }
         return self.query_trello_api(url, params, 'POST')
 
-    def __move_card_to(self, list_name):
+    def __move_card_to(self, list_name: str):
         '''
         Mit dieser Funktion wird die Karte in eine neue Spalte verschoben.
         '''

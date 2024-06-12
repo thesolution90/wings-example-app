@@ -18,7 +18,7 @@ class TrelloBoard:
         api_key (str): API Key zur Authentifizierung
         api_token (str): API Token zur Authentifzierung
     '''
-    def __init__(self, board_id=None, api_key=None, api_token=None):
+    def __init__(self, board_id: str = None, api_key: str = None, api_token: str = None):
         self.board_id = board_id if board_id is not None \
             else os.environ.get('TRELLO_BOARD_ID')
         self.api_key = api_key if api_key is not None \
@@ -27,7 +27,7 @@ class TrelloBoard:
             else os.environ.get('TRELLO_API_TOKEN')
         self.board_lists = self.__query_lists_in_board()
 
-    def get_board_lists(self):
+    def get_board_lists(self) -> dict:
         '''
         Gibt alle Listen im Trello Board zurück.
 
@@ -37,8 +37,8 @@ class TrelloBoard:
         '''
         return self.board_lists
 
-    def query_trello_api(self, url, params=None, method='GET',
-                         file_blob=None, timeout=10):
+    def query_trello_api(self, url: str, params: dict = None, method: str = 'GET',
+                         file_blob: any = None, timeout: int = 10) -> dict:
         '''
         Wrapper für die GET API Requests an die Trello REST API
         '''
@@ -78,7 +78,7 @@ class TrelloBoard:
             raise TrelloException(error_message)
         return json.loads(response.text)
 
-    def __query_lists_in_board(self):
+    def __query_lists_in_board(self) -> dict:
         '''
         Diese Funktion gibt alle Listen inklusive der IDs innerhalb des
         Trello Boards zurück
