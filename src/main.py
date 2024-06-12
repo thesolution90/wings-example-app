@@ -6,6 +6,7 @@ import socketserver
 from http import HTTPStatus
 import threading
 
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     '''
     Logik innerhalb des Get Requests
@@ -14,6 +15,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_response(HTTPStatus.OK)
         self.end_headers()
         self.wfile.write(b'Hallo Welt!')
+
 
 class ServerThread(threading.Thread):
     '''
@@ -30,6 +32,7 @@ class ServerThread(threading.Thread):
     def shutdown(self):
         '''Stoppen des Servers'''
         self.server.shutdown()
+
 
 if __name__ == '__main__':
     httpd = socketserver.TCPServer(('', 5000), Handler)

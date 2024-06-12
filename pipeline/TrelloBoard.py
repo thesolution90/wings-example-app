@@ -6,20 +6,25 @@ import os
 import requests
 from TrelloException import TrelloException
 
+
 class TrelloBoard:
     '''
-    Diese Klasse beinhaltet alle Informationen und Verbindungen zu dem konkreten
-    Trello Board, was verwendet wird.
+    Diese Klasse beinhaltet alle Informationen und Verbindungen zu dem
+    konkreten Trello Board, was verwendet wird.
 
     Parameters:
-        board_id (str): Id des Trello Boards. Wird in den CI/CD Variables konfiguriert.
+        board_id (str): Id des Trello Boards. Wird in den CI/CD
+                        Variablen konfiguriert.
         api_key (str): API Key zur Authentifizierung
         api_token (str): API Token zur Authentifzierung
     '''
     def __init__(self, board_id=None, api_key=None, api_token=None):
-        self.board_id = board_id if board_id is not None else os.environ.get('TRELLO_BOARD_ID')
-        self.api_key = api_key if api_key is not None else os.environ.get('TRELLO_API_KEY')
-        self.api_token = api_token if api_token is not None else os.environ.get('TRELLO_API_TOKEN')
+        self.board_id = board_id if board_id is not None \
+            else os.environ.get('TRELLO_BOARD_ID')
+        self.api_key = api_key if api_key is not None \
+            else os.environ.get('TRELLO_API_KEY')
+        self.api_token = api_token if api_token is not None \
+            else os.environ.get('TRELLO_API_TOKEN')
         self.board_lists = self.__query_lists_in_board()
 
     def get_board_lists(self):
@@ -27,11 +32,13 @@ class TrelloBoard:
         Gibt alle Listen im Trello Board zurück.
 
         Returns:
-            board_lists (dict): Name aller Boards zusammen mit ihren IDs als Key-Value
+            board_lists (dict): Name aller Boards zusammen mit ihren IDs als
+                                Key-Value Paar
         '''
         return self.board_lists
 
-    def query_trello_api(self, url, params=None, method='GET', file_blob=None, timeout=10):
+    def query_trello_api(self, url, params=None, method='GET',
+                         file_blob=None, timeout=10):
         '''
         Wrapper für die GET API Requests an die Trello REST API
         '''
@@ -73,7 +80,8 @@ class TrelloBoard:
 
     def __query_lists_in_board(self):
         '''
-        Diese Funktion gibt alle Listen inklusive der IDs innerhalb des Trello Boards zurück
+        Diese Funktion gibt alle Listen inklusive der IDs innerhalb des
+        Trello Boards zurück
 
         Returns:
             lists (dict): Dict aller Listen mit ID und Name

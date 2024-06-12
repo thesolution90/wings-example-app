@@ -12,8 +12,8 @@ from GitHubCommit import GitHubCommit
 
 parser = argparse.ArgumentParser(
     prog='pipeline',
-    description='Dieses Programm führt die Trello Integrationen für GitLab CI/CD aus')
-parser.add_argument('--step', action='store', type=str, help='Name der auszuführenden Funktion')
+    description='Dieses Programm ruft die Git und Trello Integration auf')
+parser.add_argument('--step', action='store', type=str, help='CI Schritt')
 args = parser.parse_args()
 
 allowed_step_strings = [
@@ -57,7 +57,7 @@ if args.step == allowed_step_strings[3]:
 if args.step == allowed_step_strings[4]:
     IS_PIPELINE_FAILED = os.environ.get('PIPELINE_FAILED') == 'true'
     if os.environ.get('REVIEW_ACCEPTED') is not None \
-    and os.environ.get('REVIEW_ACCEPTED').lower() in ['yes', 'true']:
+            and os.environ.get('REVIEW_ACCEPTED').lower() in ['yes', 'true']:
         IS_REVIEW_FAILED = False
     else:
         IS_REVIEW_FAILED = True

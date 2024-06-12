@@ -7,6 +7,7 @@ from http import HTTPStatus
 import requests
 from src.main import ServerThread
 
+
 class TestHTTPServer(unittest.TestCase):
     '''
     Test Cases für den Unit Test
@@ -29,6 +30,7 @@ class TestHTTPServer(unittest.TestCase):
         response = requests.get('http://localhost:5000', timeout=10)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.content, b'Hallo Welt!')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -5,6 +5,7 @@ Sie ist die übergeordnete Klasse für alle Quellsysteme, die Git verwenden.
 import os
 from GitException import GitException
 
+
 class GitCommit:
     '''
     Diese Klasse beinhaltet die nötigen Informationen eines Git Commits,
@@ -16,7 +17,7 @@ class GitCommit:
         branch_name (str): Name des Git Branches des Commits
         commit_hash(str): Hashwert des Commits
         commit_message(str): Nachricht des Commits
-        image_name(str): Name des Docker-Images, das aus dem Commit erzeugt wird
+        image_name(str): Name des Docker-Images für den Commit
         project_url(str): URL zu dem konkreten Projekt bei GitHub/Lab
         pipeline_id(str): ID der aktuellen CI/CD Pipeline
         pipeline_link_url(str): Link zur Pipeline bei GitHub/Lab
@@ -24,8 +25,8 @@ class GitCommit:
         test_report_link_url(str): Link zum Unittest Report bei GitHub/Lab
     '''
     def __init__(self, branch_name, commit_hash, commit_message,
-        image_name, project_url, pipeline_id, pipeline_link_url,
-        commit_link_url, test_report_link_url):
+                 image_name, project_url, pipeline_id, pipeline_link_url,
+                 commit_link_url, test_report_link_url):
         self.branch_name = branch_name
         self.commit_hash = commit_hash
         self.commit_message = commit_message

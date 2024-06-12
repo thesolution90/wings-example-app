@@ -7,13 +7,14 @@ from GitCommit import GitCommit
 from TrelloBoard import TrelloBoard
 from TrelloException import TrelloException
 
+
 class TrelloTask(TrelloBoard):
     '''
     Diese Klasse beinhaltet alle Funktionen die in den verschiedenen Pipeline
-    Jobs aufgerufen werden können und damit dann der Status des passenden Tickets geändert
-    werden kann.
-    Damit dies funktioniert muss ein Ticket in dem Trello Board vorhanden sein, dass den
-    Namen des Branches beinhaltet und das "gitlab" Label hat.
+    Jobs aufgerufen werden können und damit dann der Status des passenden
+    Tickets geändert werden kann.
+    Damit dies funktioniert muss ein Ticket in dem Trello Board vorhanden sein,
+    das den Namen des Branches beinhaltet und das "gitlab" Label hat.
 
             Parameters:
                     board_id (str): ID des Trello Boards
@@ -21,10 +22,11 @@ class TrelloTask(TrelloBoard):
                     api_token (str): API Token des Trello Benutzers
                     gitlab_branch_name (str): Name des aktuelle Gitlab Branches
                     gitlab_commit_hash (str): (voller) Commit Hash
-                    gitlab_commit_message (str): Nachricht des Entwicklers innerhalb des Commits
+                    gitlab_commit_message (str): Nachricht des Entwicklers
+                                                 innerhalb des Commits
                     gitlab_pipeline_id (str): ID der Gitlab Pipeline
-                    gitlab_project_url (str): URL zum Projekt innerhalb von Gitlab
-                    gitlab_image_name (str): Name des Docker Images in der Gitlab Registry
+                    gitlab_project_url (str): URL zum Projekt in von Gitlab
+                    gitlab_image_name (str): Name des Docker Images in Gitlab
     '''
     def __init__(self, git_commit):
         super().__init__()
@@ -53,8 +55,8 @@ class TrelloTask(TrelloBoard):
         api_response = self.query_trello_api(url, query)
         # Prüfen der Karte auf Einmaligkeit
         if len(api_response['cards']) != 1:
-            raise TrelloException('''Too many cards found. Need exactly one result.
-            Check the unique and matching naming of branch and card.
+            raise TrelloException('''Too many cards found. Need exactly one
+            result. Check the unique and matching naming of branch and card.
             Aborting.''')
         task = api_response['cards'][0]
         # Prüfen auf das GitLab label
@@ -62,7 +64,8 @@ class TrelloTask(TrelloBoard):
             if label['name'] == 'git':
                 git_label_existing = True
         if not git_label_existing:
-            raise TrelloException('The identified task has not the git label. Aborting.')
+            raise TrelloException('''The identified task has not the git label.
+            Aborting.''')
         return {
             'task_id': task['id'],
             'list_id': task['idList']
@@ -88,12 +91,12 @@ class TrelloTask(TrelloBoard):
 
     def intra_feature_branch_pipeline(self):
         '''
-        Diese Funktion wird aufgerufen wenn die Review Umgebung in der Pipeline gestartet
-        worden ist.
+        Diese Funktion wird aufgerufen wenn die Review Umgebung in der Pipeline
+        gestartet worden ist.
         Folgende Dinge passieren hier:
             - Card wird auf "In Review" verschoben
-            - Status Meldung in das Ticket mit der Zeit und dem Link zum Review Bereich
-            TODO - Upload der Ergebnisse der statischen Tests (Artefakte)
+            - Status Meldung in das Ticket mit der Zeit und dem Link zum Review
+              Bereich
         '''
         self.__move_card_to('In Review')
 
@@ -102,7 +105,7 @@ class TrelloTask(TrelloBoard):
         card_comment_text = f'''
         Automatisiert generierte Nachricht von {self.source_system} um {self.now}:
         - Für den [Commit]({self.git_commit.get_commit_link_url()}) `{self.git_commit.get_commit_message()}` ist die Review gestartet worden.
-        - Der Task wird auf den Status "In Review" verschoben.        
+        - Der Task wird auf den Status "In Review" verschoben.
         - Die Review Instanz kann [hier]({review_url}) eingesehen werden.
         - Die Review muss [hier]({self.git_commit.get_pipeline_link_url()}) akzeptiert oder abgelehnt werden.
         - Die Ergebnisse der CI Tests finden sich im Anhang dieses Tasks.
@@ -115,13 +118,14 @@ class TrelloTask(TrelloBoard):
         # self.__upload_attachment('gl-container-scanning-report.json')
         # self.__upload_attachment('gl-sbom-report.cdx.json')
 
-    def post_feature_branch_pipeline(self, is_review_failed, is_pipeline_failed):
+    def post_feature_branch_pipeline(self, is_review_failed,
+                                     is_pipeline_failed):
         '''
         Diese Funktion wird aufgerufen wenn die Review Pipelines enden.
         Folgende Dinge passieren hier:
             - Bei Erfolg:
                 - Card wird auf "Ready to Deploy" geschoben
-                - Link zum Commit und der Pipeline werden in das Ticket geschrieben
+                - Link zum Commit und Pipeline werden in das Ticket geschrieben
                 - Link zu Unit Test werden geschrieben
                 - Artefakte werden als Anhänge in das Ticket geladen
             - Bei Ablehnung der Review und bei Fehlern in der Pipeline:
@@ -189,7 +193,7 @@ class TrelloTask(TrelloBoard):
                 - Fehlermeldung mit Commit wird eingetragen
             - Bei Erfolg:
                 - Card wird auf "Deployed" geschoben
-                - Link zum Commit und der Pipeline werden in das Ticket geschrieben
+                - Link zum Commit und Pipeline werden in das Ticket geschrieben
         '''
         if not is_failed:
             self.__move_card_to('Deployed')
