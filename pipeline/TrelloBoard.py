@@ -4,6 +4,7 @@ Diese Datei beinhaltet die Klasse TrelloBoard
 import json
 import os
 import requests
+from TrelloException import TrelloException
 
 class TrelloBoard:
     '''
@@ -60,6 +61,14 @@ class TrelloBoard:
                 files=file_blob,
                 timeout=timeout
             )
+        if response.status_code != 200:
+            error_message = f'''
+            Status Code: {response.status_code}
+            URL: {url}
+            Params: {final_params}
+            Response Text: {response.text}
+            '''
+            raise TrelloException(error_message)
         return json.loads(response.text)
 
     def __query_lists_in_board(self):
