@@ -33,7 +33,7 @@ class ServerThread(threading.Thread):
         '''Stoppen des Servers'''
         self.server.shutdown()
 
-
+# Starten des Webservers
 if __name__ == '__main__':
     httpd = socketserver.TCPServer(('', 5000), Handler)
     httpd.serve_forever()
