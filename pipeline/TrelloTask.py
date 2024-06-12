@@ -37,7 +37,7 @@ class TrelloTask(TrelloBoard):
         self.now = now.strftime("%d/%m/%Y %H:%M:%S")
         self.source_system = GitCommit.check_source_system()
 
-    def __get_task(self):
+    def __get_task(self) -> dict:
         '''
         Auffinden der passenden und eindeutigen Karte im Trello Board
 
@@ -73,7 +73,7 @@ class TrelloTask(TrelloBoard):
             'list_id': task['idList']
         }
 
-    def pre_feature_branch_pipeline(self):
+    def pre_feature_branch_pipeline(self) -> None:
         '''
         Diese Funktion wird aufgerufen wenn die Review Pipelines starten.
         Folgende Dinge passieren hier:
@@ -91,7 +91,7 @@ class TrelloTask(TrelloBoard):
         '''
         self.__add_new_comment(card_comment_text)
 
-    def intra_feature_branch_pipeline(self):
+    def intra_feature_branch_pipeline(self) -> None:
         '''
         Diese Funktion wird aufgerufen wenn die Review Umgebung in der Pipeline
         gestartet worden ist.
@@ -121,7 +121,7 @@ class TrelloTask(TrelloBoard):
         # self.__upload_attachment('gl-sbom-report.cdx.json')
 
     def post_feature_branch_pipeline(self, is_review_failed: bool,
-                                     is_pipeline_failed: bool):
+                                     is_pipeline_failed: bool) -> None:
         '''
         Diese Funktion wird aufgerufen wenn die Review Pipelines enden.
         Folgende Dinge passieren hier:
@@ -143,7 +143,7 @@ class TrelloTask(TrelloBoard):
             - Der Task wird auf den Status "In Development" verschoben.
             - Die Pipeline für den Commit kann [hier]({self.git_commit.get_pipeline_link_url()}) eingesehen werden.
             '''
-            return self.__add_new_comment(card_comment_text)
+            self.__add_new_comment(card_comment_text)
 
         if not is_review_failed:
             self.__move_card_to('Ready to Deploy')
@@ -156,7 +156,7 @@ class TrelloTask(TrelloBoard):
             - Das fertige Docker Image hat den folgenden Namen: `{self.git_commit.get_image_name()}`
             **Der Feature Branch kann nun gemergt werden.**
             '''
-            return self.__add_new_comment(card_comment_text)
+            self.__add_new_comment(card_comment_text)
         else:
             self.__move_card_to('In Development')
 
@@ -166,9 +166,9 @@ class TrelloTask(TrelloBoard):
             - Der Task wird auf den Status "In Development" verschoben.
             - Die Pipeline für den Commit kann [hier]({self.git_commit.get_pipeline_link_url()}) eingesehen werden.
             '''
-            return self.__add_new_comment(card_comment_text)
+            self.__add_new_comment(card_comment_text)
 
-    def pre_production_pipeline(self):
+    def pre_production_pipeline(self) -> None:
         '''
         Diese Funktion wird aufgerufen wenn die Production Pipelines starten.
         Folgende Dinge passieren hier:
@@ -219,7 +219,7 @@ class TrelloTask(TrelloBoard):
             '''
             self.__add_new_comment(card_comment_text)
 
-    def __add_new_comment(self, text: str):
+    def __add_new_comment(self, text: str) -> dict:
         '''
         Mit dieser Funktion wird ein neuer Kommentar zu einer Card hinzugefügt.
         '''
@@ -229,7 +229,7 @@ class TrelloTask(TrelloBoard):
         }
         return self.query_trello_api(url, params, 'POST')
 
-    def __move_card_to(self, list_name: str):
+    def __move_card_to(self, list_name: str) -> dict:
         '''
         Mit dieser Funktion wird die Karte in eine neue Spalte verschoben.
         '''
@@ -239,7 +239,7 @@ class TrelloTask(TrelloBoard):
         }
         return self.query_trello_api(url, params, 'PUT')
 
-    def __upload_attachment(self, file_path):
+    def __upload_attachment(self, file_path: str) -> dict:
         '''
         Mit dieser Funktion werden Anhänge hochgeladen.
         '''
