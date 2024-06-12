@@ -54,6 +54,8 @@ class TrelloTask(TrelloBoard):
         }
         api_response = self.query_trello_api(url, query)
         # Prüfen der Karte auf Einmaligkeit
+        print(query)
+        print(api_response)
         if len(api_response['cards']) != 1:
             raise TrelloException('''Too many cards found. Need exactly one
             result. Check the unique and matching naming of branch and card.
