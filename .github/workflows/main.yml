@@ -92,10 +92,9 @@ jobs:
       run: |
         export SHELL=/bin/bash
         eval $(minikube -p minikube docker-env)
-        docker build -t local/wings-example-app:latest .       
+        docker build -t local/wings-example-app:latest .
     - name: Deploy to minikube
-      run:
-        export SHELL=/bin/bash
+      run: |
         kubectl create namespace wings-app
         kubectl apply -f kubernetes/app.yaml
         kubectl wait -f kubernetes/app.yaml --for=condition=Ready
@@ -103,7 +102,6 @@ jobs:
       run: |
         chmod +x qa_script_github.sh
         ./qa_script_github.sh
-    needs: unittest
     if: ${{ github.event_name }} == "push"
 
   sync-trello-feature-branch:
