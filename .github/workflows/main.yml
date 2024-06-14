@@ -88,24 +88,20 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: medyagh/setup-minikube@master
-    - name: Try the cluster !
-      run: kubectl get pods -A
     - name: Build image
       run: |
         export SHELL=/bin/bash
         eval $(minikube -p minikube docker-env)
-        docker build -f ./Dockerfile -t local/example .
-        echo -n "verifying images:"
-        docker images        
+        docker build -t local/wings-example-app:latest .       
     - name: Deploy to minikube
       run:
-        kubectl apply -f deploy-to-minikube.yaml
-    - name: Test service URLs
+        kubectl create namespace wings-app
+        kubectl apply -f kubernetes/app.yaml
+        kubectl wait -f kubernetes/app.yaml --for=condition=Ready
+    - name: Mock Review Person
       run: |
-        minikube service list
-        minikube service example --url
-        echo "------------------opening the service------------------"
-        curl $(minikube service example --url)
+        chmod +x qa_script_github.sh
+        ./qa_script_github.sh
     needs: unittest
     if: ${{ github.event_name }} == "push"
 

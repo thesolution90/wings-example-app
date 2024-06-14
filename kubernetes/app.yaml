@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wings-example-app
+  labels:
+    app: wings-example-app
+  namespace: wings-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wings-example-app
+  template:
+    metadata:
+      labels:
+        app: wings-example-app
+    spec:
+      containers:
+      - name: wings-example-app
+        image: local/wings-example-app:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wings-example-app
+  namespace: wings-app
+spec:
+  selector:
+    app: wings-example-app
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
