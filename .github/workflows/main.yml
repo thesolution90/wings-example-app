@@ -82,6 +82,33 @@ jobs:
     needs: build
     if: ${{ github.event_name }} == "push"
 
+  deploy-to-minikube:
+    runs-on: ubuntu-latest
+    name: minikube example
+    steps:
+    - uses: actions/checkout@v2
+    - uses: medyagh/setup-minikube@master
+    - name: Try the cluster !
+      run: kubectl get pods -A
+    - name: Build image
+      run: |
+        export SHELL=/bin/bash
+        eval $(minikube -p minikube docker-env)
+        docker build -f ./Dockerfile -t local/example .
+        echo -n "verifying images:"
+        docker images        
+    - name: Deploy to minikube
+      run:
+        kubectl apply -f deploy-to-minikube.yaml
+    - name: Test service URLs
+      run: |
+        minikube service list
+        minikube service example --url
+        echo "------------------opening the service------------------"
+        curl $(minikube service example --url)
+    needs: unittest
+    if: ${{ github.event_name }} == "push"
+
   sync-trello-feature-branch:
     runs-on: ubuntu-latest
     steps:
