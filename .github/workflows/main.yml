@@ -95,6 +95,7 @@ jobs:
         docker build -t local/wings-example-app:latest .       
     - name: Deploy to minikube
       run:
+        export SHELL=/bin/bash
         kubectl create namespace wings-app
         kubectl apply -f kubernetes/app.yaml
         kubectl wait -f kubernetes/app.yaml --for=condition=Ready
