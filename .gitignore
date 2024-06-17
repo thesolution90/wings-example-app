@@ -2,4 +2,4 @@ src/__pycache__
 report.xml
 .pytest-cache
 pipeline/__pycache__
-SHOWCASE.md
+COMMANDS.md
