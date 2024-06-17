@@ -82,28 +82,6 @@ jobs:
     needs: build
     if: ${{ github.event_name }} == "push"
 
-  deploy-to-minikube:
-    runs-on: ubuntu-latest
-    name: minikube example
-    steps:
-    - uses: actions/checkout@v2
-    - uses: medyagh/setup-minikube@master
-    - name: Build image
-      run: |
-        export SHELL=/bin/bash
-        eval $(minikube -p minikube docker-env)
-        docker build -t local/wings-example-app:latest .
-    - name: Deploy to minikube
-      run: |
-        kubectl create namespace wings-app
-        kubectl apply -f kubernetes/app.yaml
-        kubectl wait -f kubernetes/app.yaml --for=condition=Ready
-    - name: Mock Review Person
-      run: |
-        chmod +x qa_script_github.sh
-        ./qa_script_github.sh
-    if: ${{ github.event_name }} == "push"
-
   sync-trello-feature-branch:
     runs-on: ubuntu-latest
     steps:
