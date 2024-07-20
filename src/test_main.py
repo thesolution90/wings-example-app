@@ -29,7 +29,7 @@ class TestHTTPServer(unittest.TestCase):
         '''
         response = requests.get('http://localhost:5000', timeout=10)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.content, b'Hallo Welt!')
+        self.assertEqual(response.content, b'Hello world!')
 
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
         self.end_headers()
-        self.wfile.write(b'Hallo Welt!')
+        self.wfile.write(b'Hello world!')
 
 
 class ServerThread(threading.Thread):
