@@ -26,7 +26,7 @@ class ServerThread(threading.Thread):
         self.server = socketserver.TCPServer(('localhost', 5000), Handler)
 
     def run(self):
-        '''Starten des Servers'''
+        '''Starten des Webservers'''
         self.server.serve_forever()
 
     def shutdown(self):
