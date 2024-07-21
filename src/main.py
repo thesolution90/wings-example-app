@@ -17,6 +17,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(b'Hello world!')
 
 
+
 class ServerThread(threading.Thread):
     '''
     Hier ist der Webserver definiert
